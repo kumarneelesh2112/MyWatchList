@@ -1,0 +1,75 @@
+.LandingPage{
+    background: linear-gradient(to bottom, rgba(255,255,255,0.15) 0%, rgba(0,0,0,0.15) 100%), radial-gradient(at top center, rgba(255,255,255,0.40) 0%, rgba(0,0,0,0.40) 120%) #989898;
+    background-blend-mode: multiply,multiply;;
+    height: 70vh;
+    
+
+}
+
+
+
+
+.banner1{
+       
+    background:linear-gradient(to bottom ,rgba(0,0,0,0.4),rgba(0,0,0,0.9)),url(assets/images/onepunchman.jpg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 70vh;
+    width: 20vw;
+}
+.banner2{
+    
+    background:linear-gradient(to bottom ,rgba(0,0,0,0.4),rgba(0,0,0,0.9)),url(assets/images/ds.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 70vh;
+    width: 20vw;
+}
+
+.banner3{
+   
+    background:linear-gradient(to bottom ,rgba(0,0,0,0.4),rgba(0,0,0,0.9)),url(assets/images/deathnote.jpg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 70vh;
+    width: 20vw;
+}
+.banner6{
+   
+    background:linear-gradient(to bottom ,rgba(0,0,0,0.4),rgba(0,0,0,0.9)),url(assets/images/blackclover.jpg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 70vh;
+    width: 20vw;
+}
+.banner4{
+   
+    background:linear-gradient(to bottom ,rgba(0,0,0,0.4),rgba(0,0,0,0.9)),url(assets/images/haikyuu.jpg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 70vh;
+    width: 20vw;
+}
+.banner5{
+   
+    background:linear-gradient(to bottom ,rgba(0,0,0,0.4),rgba(0,0,0,0.9)),url(assets/images/naruto.jpg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 70vh;
+    width: 20vw;
+}
+
+.social{  
+   
+    min-height: 22.5vh;
+    padding-top: 50px;
+    text-align: center;   
+    background-color: #2d3436;
+    color: aliceblue;
+}

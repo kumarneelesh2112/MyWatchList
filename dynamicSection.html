@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <title>Document</title>
+  <script type="module" defer>
+
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.2/firebase-app.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDone4-lTnQ8hOFYhcu3qMLtkSAG7sqW9E",
+      authDomain: "mywatchlist-3319d.firebaseapp.com",
+      databaseURL: "https://mywatchlist-3319d-default-rtdb.firebaseio.com",
+      projectId: "mywatchlist-3319d",
+      storageBucket: "mywatchlist-3319d.appspot.com",
+      messagingSenderId: "85357927013",
+      appId: "1:85357927013:web:baafb37390c4cef0d5848c",
+      measurementId: "G-7EL69XFD0B"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    import { getDatabase, get, ref, set, child, update, remove,push }
+      from "https://www.gstatic.com/firebasejs/9.6.2/firebase-database.js";
+    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.6.2/firebase-auth.js";
+    const db = getDatabase();
+    const auth = getAuth(app);
+    let totalNotes = 0;
+    let newSeason, newEpisode, newNote;
+    let name;
+
+    document.querySelector("#submit").addEventListener("click", () => {
+
+      newEpisode = document.querySelector("#newEpisode").value;
+      //console.log(newEpisode);
+      newSeason = document.querySelector("#newSeason").value;
+      // console.log(newSeason);
+      newNote = document.querySelector("#newNote").value;
+      addToNoteSection(newSeason, newEpisode, newNote);
+      pushNoteToDb(newSeason, newEpisode, newNote);
+
+    })
+    function pushNoteToDb(newSeason, newEpisode, newNote) {
+
+      totalNotes++;
+      //let number=toString(totalNotes);
+      // console.log(number);
+
+      const postListRef = ref(db, "TheShows/" + name + "/" + "Notes/");
+      const newPostRef = push(postListRef);
+      set(newPostRef, {         
+          Season: newSeason,
+          Episode: newEpisode,
+          Note: newNote        
+        // ...
+      })
+      
+
+        .then(() => {
+          document.querySelector(".noteForm").style.visibility = "hidden";
+          alert("Data inserted..");
+        })
+        .catch(() => {
+          alert("failed to insert data..");
+        });
+
+
+    }
+
+
+
+
+
+    window.onload = function () {
+      const params = (new URL(document.location)).searchParams;
+      name = params.get('name');
+      const url = params.get('url');
+      const rating = params.get('rating');
+      //const status=params.get('status');
+      document.querySelector("#name").innerHTML = name;
+      document.querySelector("#url").setAttribute("src", url);
+      document.querySelector("#rating").innerHTML = rating;
+      fetchNotes();
+
+    }
+
+    const noteSection = document.querySelector("#noteSection");
+    function addToNoteSection(Season, Episode, Note) {
+      const newNote = noteSection.querySelector(".noteBanner").cloneNode(true);
+      newNote.style.display = "block";
+      newNote.querySelector("#season").innerText = "Season : " + Season;
+      newNote.querySelector("#episode").innerText = "Episode : " + Episode;
+      newNote.querySelector("#note").innerText = Note;
+      noteSection.appendChild(newNote);
+    }
+
+    function fetchNotes() {
+      const dbref = ref(db);
+      get(child(dbref, "TheShows/" + name + "/" + "Notes/"))
+        .then((snapshot) => {
+          var shows = [];
+          snapshot.forEach(childSnapshot => {
+            shows.push(childSnapshot.val());
+          });
+
+          shows.forEach(element => {
+            // console.log(element["Season"]);          
+            addToNoteSection(element["Season"], element["Episode"], element["Note"]);
+          })
+        })
+    }
+
+
+
+    // console.log(querySelector("#noteAddButton"))
+
+    document.querySelector("#noteAddButton").addEventListener("click", () => {
+      const noteForm = document.querySelector(".noteForm");
+      if (noteForm.style.visibility == "hidden") noteForm.style.visibility = "visible";
+      else noteForm.style.visibility = "hidden";
+    });
+  </script>
+
+
+</head>
+
+<body>
+
+  <!-- start of navbar -->
+  <nav class="navbar navbar-expand-lg navbar navbar-dark bg-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">My WatchList</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="index.html">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="Signup.html">Sign up</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="login.html">Log In</a>
+          </li>
+        </ul>
+        <form class="d-flex">
+          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+          <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
+      </div>
+    </div>
+  </nav>
+
+  <!-- end of navbar -->
+
+  <div class="container noteForm"
+    style="background-color: red; margin:10px;padding: 20px;display:flex; flex-direction: column; max-height: 450px; max-width:800px; border: solid 2px black;position: absolute; top: 28%;left:25%;border-radius: 25px; background-color: white; box-shadow:5px 50px 1008px #302f2f ;z-index:10;visibility: hidden;">
+    season : <input type="text" name="" id="newSeason">
+    Episode No : <input type="text" name="" id="newEpisode">
+    Add Note: <textarea name="add note" id="newNote" cols="10" rows="5"></textarea>
+
+    <button id="submit" type="submit" style="margin:auto;width: 80px; margin-top: 10px;">Submit</button>
+  </div>
+
+  <div class="myClass" style="z-index:2; min-height: 88vh;">
+    <div
+      style="display: flex;  justify-content: space-around; align-items: center;margin-top: 10px; box-shadow:5px 10px 18px #989898;">
+      <img id="url" src="" alt="" style="height: 250px; width: 240px; padding: 10px;">
+      <h3>Name : <span id="name"></span></h3>
+      <h3 id="status"></h3>
+      <h3>Rating : <span id="rating">Rating</span><i class="fa fa-star" aria-hidden="true"
+          style="size: 20px;color: rgb(223, 155, 10);"></i></h3>
+    </div>
+
+    <!-- <div style="display: flex; margin-left: 10px;margin-top: 25px; flex-direction: column;">
+
+      <div style="border:2px solid rgb(33, 158, 230); border-radius: 15px; margin-bottom:10px;">
+        <div style=" display:flex; width: 100%; justify-content: space-between;">
+          <h3 style="margin-left:10px;">Season 1 EpisodeNo 5</h3>
+          <div>
+            <i class="fa fa-pencil-square-o" style="font-size: 40px; margin-right: 25px ; "></i>
+            <i class="fa fa-trash" style="font-size: 40px; margin-right: 25px;"></i>
+          </div>
+        </div>
+        <p style="margin: 10px;  ;">Lorem ipsum dsectetur aoiej erhg gr hgi ruhgirt hgri ghrtghtr g trug hitug huit i
+          dipisicing elit. Iste, sint!</p>
+      </div>
+    </div> -->
+
+    <div id="noteSection">
+      <div class="container noteBanner" style=" display:none;margin-top:20px">
+        <div class="row" style="background-color:rgb(37, 36, 36); color: aliceblue; height:20px">
+
+          <div id="season" class="col-3">Season : #</div>
+          <div id="episode" class="col-3">Episode : #</div>
+          <div class="col-4"></div>
+          <div class="col-1">Edit</div>
+          <div class="col-1">Delete</div>
+
+        </div>
+        <div class="row"
+          style="border: 2px solid rgb(37, 36, 36);border-end-end-radius:10px;border-end-start-radius:10px; height:65px">
+          <p id="note">Lorem iodi vero natus reiciendis nostrum fugit? Aliquam dicta itaque dolorum.</p>
+        </div>
+      </div>
+
+    </div>
+
+
+
+
+  </div>
+
+
+
+  <i id="noteAddButton" class="fa fa-plus-circle"
+    style=" font-size:70px; position:absolute;top: 70px;right:50px; cursor: pointer;"></i>
+
+  <!-- footer -->
+  <footer style="text-align: center;background-color: #2c2c2c; color: aliceblue; width: 100%;">
+    MyWatchlist
+  </footer>
+  <!-- end of footer  -->
+
+</body>
+
+</html>
